@@ -29,16 +29,20 @@ def binary_addition(A, B):
     return S[::-1]
 
 
-num1=list(input("Enter 1st binary number: "))
-num2=list(input("Enter 2nd binary number: "))
-A=[]
-for i in range(len(num1)):
-    A.append(int(num1[i]))
-B=[]
-for i in range(len(num2)):
-    B.append(int(num2[i]))
-print(A)
-print(B)
+def take_input():
+    num1=list(input("Enter 1st binary number: "))
+    num2=list(input("Enter 2nd binary number: "))
+    A=[]
+    for i in range(len(num1)):
+        A.append(int(num1[i]))
+    B=[]
+    for i in range(len(num2)):
+        B.append(int(num2[i]))
+    print(A)
+    print(B)
+    return A,B
+
+A,B=take_input()
 Sum=binary_addition(A, B)
 for i in range(len(Sum)):
     print(Sum[i], end="")
