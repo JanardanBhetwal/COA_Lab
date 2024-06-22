@@ -17,58 +17,45 @@ def full_adder(a, b, c):
     return sum, carry
 
 def binary_addition(A, B):
-    A=A[::-1]
-    B=B[::-1]
-    Cin=0
-    S=[]
-    for i in range(len(A)):
+    max_len = max(len(A), len(B))
+    A = [0] * (max_len - len(A)) + A
+    B = [0] * (max_len - len(B)) + B
+    Cin = 0
+    S = []
+    for i in range(max_len-1, -1, -1):
         sum, Cin = full_adder(A[i], B[i], Cin)
-        S.append(sum)
-    return S[::-1]
+        S.insert(0, sum)
+    if Cin == 1:
+        S.insert(0, 1)
+    return S
 
 def shift_left(A):
-    bit=len(A)
-    for i in range(1,bit):
-        A[i-1]=A[i]
+    return A[1:] + [0]
 
-    A[bit-1]=0
-    return A
-
-
-def multiplication(A,B):
-    bit=len(A)
-    M=[]
+def multiplication(A, B):
+    bit = len(A)
+    A = [0] * bit + A
+    B = [0] * bit + B
+    M = [0] * (2 * bit)
+    B=B[::-1]
     for i in range(bit):
-        M.append(0)
-        M.append(0)
-        A.insert(0,0)
-        B.insert(0,0)
-    for i in range(bit):
-        if B[bit]==1:
-            M=binary_addition(M,A)
+        if B[i] == 1:
+            M = binary_addition(M, A)
         if i<bit-1:
-            M=shift_left(M)
-            B=shift_left(B)
-    
+            A = shift_left(A)
     return M
 
 def take_input():
-    num1=list(input("Enter multiplicand in binary number: "))
-    num2=list(input("Enter multiplier in binary number: "))
-    A=[]
-    for i in range(len(num1)):
-        A.append(int(num1[i]))
-    B=[]
-    for i in range(len(num2)):
-        B.append(int(num2[i]))
-    if len(A)>len(B):
-        for i in range(len(A)-len(B)):
-            B.insert(0,0)
-    elif len(A)<len(B):
-        for i in range(len(B)-len(A)):
-            A.insert(0,0)
-    return A,B
+    num1 = input("Enter multiplicand in binary number: ")
+    num2 = input("Enter multiplier in binary number: ")
+    A = [int(x) for x in num1]
+    B = [int(x) for x in num2]
+    max_len = max(len(A), len(B))
+    A = [0] * (max_len - len(A)) + A
+    B = [0] * (max_len - len(B)) + B
+    return A, B
 
 multiplicand,multiplier=take_input()
-print(multiplication(multiplicand,multiplier))
-# print(shift_left(multiplicand))
+print(multiplicand,multiplier)
+result=multiplication(multiplicand,multiplier)
+print("Product:", ''.join(map(str, result)))
